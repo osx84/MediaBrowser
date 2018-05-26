@@ -10,7 +10,7 @@
 import UIKit
 import AssetsLibrary
 import Photos
-import SDWebImage
+import Kingfisher
 
 let MEDIA_LOADING_DID_END_NOTIFICATION  = "MEDIA_LOADING_DID_END_NOTIFICATION"
 let MEDIA_PROGRESS_NOTIFICATION  = "MEDIA_PROGRESS_NOTIFICATION"
@@ -41,7 +41,7 @@ open class Media: NSObject {
     private var assetTargetSize = CGSize.zero
     
     private var loadingInProgress = false
-    private var operation: SDWebImageOperation?
+    private var operation: RetrieveImageTask?
     private var assetRequestID = PHInvalidImageRequestID
     
     //MARK: - Init
@@ -177,7 +177,7 @@ open class Media: NSObject {
                 // Load from local file async
                 performLoadUnderlyingImageAndNotifyWithLocalFileURL(url: purl)
             } else {
-                // Load async from web (using SDWebImage)
+                // Load async from web (using Kingfisher)
                 performLoadUnderlyingImageAndNotifyWithWebURL(url: purl)
             }
         } else if let a = asset {
@@ -188,20 +188,20 @@ open class Media: NSObject {
             imageLoadingComplete()
         }
     }
-
+    
     // Load from local file
     private func performLoadUnderlyingImageAndNotifyWithWebURL(url: URL) {
-        operation = SDWebImageManager.shared().loadImage(with: url, options: [], progress: { (receivedSize, expectedSize, targetURL) in
-            let dict = [
-            "progress" : min(1.0, CGFloat(receivedSize)/CGFloat(expectedSize)),
-            "photo" : self
-            ] as [String : Any]
-            
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: MEDIA_PROGRESS_NOTIFICATION), object: dict)
-            
-        }) { [weak self] (image, _, error, cacheType, finish, imageUrl) in
+        
+        operation = KingfisherManager.shared.retrieveImage(with: url, options: [.backgroundDecode],
+                                                           progressBlock: { (_ receivedSize: Int64, _ totalSize: Int64) in
+                                                            let dict = [
+                                                                "progress" : min(1.0, CGFloat(receivedSize)/CGFloat(totalSize)),
+                                                                "photo" : self
+                                                                ] as [String : Any]
+                                                            
+                                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: MEDIA_PROGRESS_NOTIFICATION), object: dict)
+        }) { [weak self] (image, error, cache, url) in
             guard let wself = self else { return }
-            
             DispatchQueue.main.async {
                 if let _image = image {
                     wself.underlyingImage = _image

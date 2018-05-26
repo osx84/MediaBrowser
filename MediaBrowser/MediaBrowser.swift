@@ -9,7 +9,7 @@
 import UIKit
 import MediaPlayer
 import QuartzCore
-import SDWebImage
+import Kingfisher
 
 func floorcgf(x: CGFloat) -> CGFloat {
     return CGFloat(floorf(Float(x)))
@@ -293,7 +293,7 @@ public class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheet
         pagingScrollView.delegate = nil
         NotificationCenter.default.removeObserver(self)
         releaseAllUnderlyingPhotos(preserveCurrent: false)
-        SDImageCache.shared().clearMemory() // clear memory
+        KingfisherManager.shared.cache.clearMemoryCache()
     }
 
     private func releaseAllUnderlyingPhotos(preserveCurrent: Bool) {
