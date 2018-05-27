@@ -10,6 +10,7 @@ import UIKit
 import MediaPlayer
 import QuartzCore
 import Kingfisher
+import UICircularProgressRing
 
 func floorcgf(x: CGFloat) -> CGFloat {
     return CGFloat(floorf(Float(x)))
@@ -190,6 +191,9 @@ open class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheetDe
     
     /// Loading Indicator Show or hide text
     public var loadingIndicatorShouldShowValueText = true
+    
+    /// Loading Indicator view style
+    public var loadingIndicatorRingStyle: UICircularProgressRingStyle = UICircularProgressRingStyle.ontop
     
     /// Media selected on icon
     public var mediaSelectedOnIcon: UIImage?
@@ -1189,6 +1193,7 @@ open class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheetDe
                 page.loadingIndicator.font = loadingIndicatorFont
                 page.loadingIndicator.fontColor = loadingIndicatorFontColor
                 page.loadingIndicator.shouldShowValueText = loadingIndicatorShouldShowValueText
+                page.loadingIndicator.ringStyle = loadingIndicatorRingStyle
                 
                 visiblePages.insert(page)
                 configurePage(page: page, forIndex: index)
@@ -1544,7 +1549,7 @@ open class MediaBrowser: UIViewController, UIScrollViewDelegate, UIActionSheetDe
                 
                 title = "\(medias) \(photosText)"
             }
-        } else if medias > 1 {
+        } else if medias >= 1 {
             if let d = delegate {
                 title = d.title(for: self, at: currentPageIndex)
             }

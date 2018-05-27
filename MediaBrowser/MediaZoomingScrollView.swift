@@ -222,7 +222,7 @@ class MediaZoomingScrollView: UIScrollView, UIScrollViewDelegate, TapDetectingIm
             let dict = notification.object as! [String : AnyObject]
             
             if let photoWithProgress = dict["photo"] as? Media, let progress = dict["progress"] as? CGFloat, let p = self.photo, photoWithProgress.equals(photo: p) {
-                self.loadingIndicator.setProgress(value: progress * 100, animationDuration: 0.1)
+                self.loadingIndicator.setProgress(to: progress * 100, duration: 0.1)
             }
         }
     }
@@ -235,7 +235,7 @@ class MediaZoomingScrollView: UIScrollView, UIScrollViewDelegate, TapDetectingIm
         zoomScale = 0.0
         minimumZoomScale = 0.0
         maximumZoomScale = 0.0
-        loadingIndicator.setProgress(value: 0.0, animationDuration: 0)
+        loadingIndicator.setProgress(to: 0.0, duration: 0)
         loadingIndicator.isHidden = false
         
         hideImageFailure()

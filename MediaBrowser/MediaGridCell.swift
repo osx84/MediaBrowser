@@ -163,7 +163,7 @@ class MediaGridCell: UICollectionViewCell {
         photo = nil
         mwGridController = nil
         imageView.image = self.placeholderImage
-        loadingIndicator.setProgress(value: 0.0, animationDuration: 1)
+        loadingIndicator.setProgress(to: 0.0, duration: 1)
         selectedButton.isHidden = true
         hideImageFailure()
         
@@ -253,7 +253,7 @@ class MediaGridCell: UICollectionViewCell {
     }
     
     func showLoadingIndicator() {
-        loadingIndicator.setProgress(value: 0.0, animationDuration: 1)
+        loadingIndicator.setProgress(to: 0.0, duration: 1)
         loadingIndicator.isHidden = false
         
         hideImageFailure()
@@ -301,7 +301,7 @@ class MediaGridCell: UICollectionViewCell {
             let dict = notification.object as! [String : AnyObject]
             
             if let photoWithProgress = dict["photo"] as? Media, let progress = dict["progress"] as? CGFloat, let p = self.photo, photoWithProgress.equals(photo: p) {
-                self.loadingIndicator.setProgress(value: progress * 100, animationDuration: 0.1)
+                self.loadingIndicator.setProgress(to: progress * 100, duration: 0.1)
             }
         }
     }
